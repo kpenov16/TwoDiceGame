@@ -9,10 +9,15 @@ public class PlayerImpl implements Player {
     public int roll() {
         lastScore = currentScore;
         currentRoll = hand.roll();
-        if(currentRoll == 12)
+        if(currentRoll == 12 && hand.hasSameDices())
             timesRolled12++;
         currentScore = (currentRoll == 2) ? 0 : (currentScore +=currentRoll);
         return currentRoll;
+    }
+
+    @Override
+    public boolean hasSameDices() {
+        return false;
     }
 
     @Override
@@ -21,7 +26,7 @@ public class PlayerImpl implements Player {
     }
 
     private boolean rolledOneEqualHandAfter40() {
-        return  (lastScore >= 40 && currentScore >= 40 && (currentRoll % 2 == 0));
+        return  (lastScore >= 40 && currentScore >= 40 && (currentRoll % 2 == 0) && hand.hasSameDices());
     }
 
     private boolean rolled2HandsOf12() {
@@ -35,7 +40,7 @@ public class PlayerImpl implements Player {
 
     @Override
     public boolean hasExtraHand() {
-        return (currentRoll % 2 == 0) ? true : false;
+        return (currentRoll % 2 == 0 && hand.hasSameDices()) ? true : false;
     }
 
     protected void setHand(Roller hand) {
